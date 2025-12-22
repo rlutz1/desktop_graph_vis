@@ -4,7 +4,7 @@ from tkinter import ttk
 root = tk.Tk()
 
 # Import the tcl file
-root.tk.call('source', 'C:/Users/lutzr/OneDrive/Desktop/My-Projects/desktop_graph_vis/UI/tkinter_theme/forest-dark.tcl')
+root.tk.call('source', 'UI/tkinter_theme/forest-dark.tcl')
 
 # Set the theme with the theme_use method
 ttk.Style().theme_use('forest-dark')
