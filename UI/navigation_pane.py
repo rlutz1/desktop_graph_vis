@@ -59,7 +59,7 @@ class NavigationPane(QTabWidget): # generally a QWidget
     widget = QWidget()
     # widget = QScrollArea()
     layout = QVBoxLayout()
-    layout.addStretch()
+   
     # layout.setSpacing(100)
     # layout.setContentsMargins(0,0,0,0)
     
@@ -69,8 +69,10 @@ class NavigationPane(QTabWidget): # generally a QWidget
       button.setFlat(True)
       button.setStyleSheet("border: 5px solid black; background-color: white; min-height: 30px") # width | style | color
       button.clicked.connect(self.test)
-      layout.insertWidget(layout.count() - 1, button)
+      # layout.insertWidget(layout.count() - 1, button)
+      layout.addWidget(button)
 
+    layout.addStretch()
     # layout.addWidget(widget)
     widget.setLayout(layout)
     parent.setWidget(widget)
