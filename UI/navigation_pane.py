@@ -23,20 +23,41 @@ from PyQt5.QtWidgets import (
 
 class NavigationPane(QWidget): # generally a QWidget
 
-  def init_pane(self):
-    layout = QVBoxLayout() # for now, a vbox is easiest
+  def init_navs(self):
+    shortest_path = QComboBox()
+    shortest_path.move(0, 0)
+    shortest_path.addItems([
+      "Bellman-Ford", 
+      "Dijkstra", 
+      "Floyd-Warshall",
+      "Breadth-First Search"
+      ])
 
-    option_box = QComboBox()
-    option_box.addItems(["Testing", "1", "2", "3"])
+    path_finding = QComboBox()
+    path_finding.addItems([
+      "Breadth-First Search",
+      "Depth-First Search",
+      "A*"
+      ])
 
-    widgets  = [
-      option_box
+    navs  = [
+      shortest_path,
+      path_finding
     ]
 
-    for w in widgets:
-      layout.addWidget(w)
+    return navs
+
+  def init_pane(self):
+    layout = QVBoxLayout() # for now, a vbox is easiest
+    navs = self.init_navs()
+
+    for nav in navs:
+      layout.addWidget(nav)
 
     self.setLayout(layout)
+    # self.setMinimumSize(250, 500)
+    # self.setMaximumSize(250, 500)
+    self.setStyleSheet("background-color: #a2c8fa; width: 100%;")
 
 
   def __init__(self):
