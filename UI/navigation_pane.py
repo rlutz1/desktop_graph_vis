@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import (
     QSpinBox,
     QTimeEdit,
     QVBoxLayout,
+    QScrollArea,
     QLayout,
     QWidget,
     QTabWidget
@@ -29,7 +30,18 @@ class NavigationPane(QTabWidget): # generally a QWidget
     "Bellman-Ford", 
     "Dijkstra", 
     "Floyd-Warshall",
-    "Breadth-First Search"
+    "Breadth-First Search",
+    "testing",
+    "yet another",
+    "testing",
+    "testing",
+    "testing",
+    "testing",
+    "testing",
+    "testing",
+    "testing",
+    "testing",
+    "testing"
     ]
   
   __path_finding_algos = [
@@ -42,8 +54,12 @@ class NavigationPane(QTabWidget): # generally a QWidget
     print("test")
 
   def init_nav(self, algorithms):
+    parent = QScrollArea()
+    parent.setWidgetResizable(True)
     widget = QWidget()
+    # widget = QScrollArea()
     layout = QVBoxLayout()
+    layout.addStretch()
     # layout.setSpacing(100)
     # layout.setContentsMargins(0,0,0,0)
     
@@ -51,13 +67,14 @@ class NavigationPane(QTabWidget): # generally a QWidget
     for a in algorithms:
       button = QPushButton(a)
       button.setFlat(True)
-      button.setStyleSheet("border: 5px solid black; background-color: white;") # width | style | color
+      button.setStyleSheet("border: 5px solid black; background-color: white; min-height: 30px") # width | style | color
       button.clicked.connect(self.test)
-      layout.addWidget(button)
+      layout.insertWidget(layout.count() - 1, button)
 
     # layout.addWidget(widget)
     widget.setLayout(layout)
-    return widget
+    parent.setWidget(widget)
+    return parent
 
 
   def init_navs(self):
