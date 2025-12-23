@@ -1,6 +1,7 @@
 import sys
 
 from UI.navigation_pane import NavigationPane
+from UI.graph_pane import GraphPane
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import (
@@ -31,17 +32,8 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
     # central_space.setStyleSheet("")
     layout = QHBoxLayout()
    
-    tabs = QTabWidget()
-    tabs.setTabPosition(QTabWidget.West)
-    tab_1 = QWidget()
-    tab_2 = QWidget()
-    # tab_bar.ButtonPosition = LeftSide
-    tabs.addTab(tab_1, "Shortest Path")
-    tabs.addTab(tab_2, "Path Finding")
-
-    layout.addWidget(tabs)
-    layout.addWidget(NavigationPane())
-    layout.addWidget(QWidget()) # placeholder
+    layout.addWidget(NavigationPane(self))
+    layout.addWidget(GraphPane(self)) # placeholder
     central_space.setLayout(layout)
 
     self.setCentralWidget(central_space)

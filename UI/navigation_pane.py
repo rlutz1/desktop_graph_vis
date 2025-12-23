@@ -18,50 +18,65 @@ from PyQt5.QtWidgets import (
     QSpinBox,
     QTimeEdit,
     QVBoxLayout,
+    QLayout,
     QWidget,
+    QTabWidget
 )
 
-class NavigationPane(QWidget): # generally a QWidget
+class NavigationPane(QTabWidget): # generally a QWidget
 
-  def init_navs(self):
-    shortest_path = QComboBox()
-    shortest_path.move(0, 0)
-    shortest_path.addItems([
-      "Bellman-Ford", 
-      "Dijkstra", 
-      "Floyd-Warshall",
-      "Breadth-First Search"
-      ])
-
-    path_finding = QComboBox()
-    path_finding.addItems([
-      "Breadth-First Search",
-      "Depth-First Search",
-      "A*"
-      ])
-
-    navs  = [
-      shortest_path,
-      path_finding
+  __shortest_path_algos = [
+    "Bellman-Ford", 
+    "Dijkstra", 
+    "Floyd-Warshall",
+    "Breadth-First Search"
+    ]
+  
+  __path_finding_algos = [
+    "Breadth-First Search",
+    "Depth-First Search",
+    "A*"
     ]
 
-    return navs
+  def test(self):
+    print("test")
+
+  def init_nav(self, algorithms):
+    widget = QWidget()
+    layout = QVBoxLayout()
+    # layout.setSpacing(100)
+    # layout.setContentsMargins(0,0,0,0)
+    
+    
+    for a in algorithms:
+      button = QPushButton(a)
+      button.setFlat(True)
+      button.setStyleSheet("border: 5px solid black; background-color: white;") # width | style | color
+      button.clicked.connect(self.test)
+      layout.addWidget(button)
+
+    # layout.addWidget(widget)
+    widget.setLayout(layout)
+    return widget
+
+
+  def init_navs(self):
+    # navs = QTabWidget()
+    self.setTabPosition(QTabWidget.West)
+    # tab_bar.ButtonPosition = LeftSide
+    self.addTab(self.init_nav(self.__shortest_path_algos), "Shortest Path")
+    self.addTab(self.init_nav(self.__path_finding_algos), "Path Finding") 
 
   def init_pane(self):
-    layout = QVBoxLayout() # for now, a vbox is easiest
-    navs = self.init_navs()
-
-    for nav in navs:
-      layout.addWidget(nav)
-
-    self.setLayout(layout)
+    self.init_navs()
+    
     # self.setMinimumSize(250, 500)
     # self.setMaximumSize(250, 500)
-    self.setStyleSheet("background-color: #a2c8fa; width: 100%;")
+    self.setStyleSheet("background-color: #a2c8fa; max-width: 250px;")
 
 
-  def __init__(self):
-    super().__init__() # super initialization
+  def __init__(self, parent):
+    super().__init__(parent) # super initialization
 
     # idea is to have a layout, list of widgets, add widgets
     # to the layout, set this widget layout to the layout wanted,
