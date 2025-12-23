@@ -1,3 +1,4 @@
+from UI.main_window import MainWindow
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMainWindow
 from PyQt5.QtCore import QSize, Qt
 # Only needed for access to command line arguments
@@ -10,15 +11,7 @@ import sys
 # app = QApplication(sys.argv)
 app = QApplication([]) # empty for now, use above if command args become a thing
 
-# Create a Qt widget, which will be our window.
-# window = QWidget()
-window = QMainWindow()
-window.setWindowTitle("Graph Algorithm Visualizer") # basic title
-window.setMinimumSize(QSize(1000, 500))
-
-button = QPushButton("Gimme a sexy push")
-button.setFixedSize(QSize(200, 50))
-window.setCentralWidget(button) # set the central widget in vanilla layout of main winodw
+window = MainWindow()
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 
