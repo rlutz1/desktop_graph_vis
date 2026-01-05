@@ -24,10 +24,11 @@ class Graph:
   def add_edge(self, start, end, weight = None): # assuming start and end are id's of vertex
     if self.valid_edge(start, end, weight):
       edge = Edge(start, end, weight)
+      # edge.print()
       self.add_edge_to_vertex(edge)
       self.add_vertex(end)
       self.__edges.append(edge)
-    print("todo")
+    # print("todo")
 
   def add_edge_to_vertex(self, edge):
     id = edge.get_start()
@@ -37,7 +38,7 @@ class Graph:
         return
 
     # vertex was not found in list, make a new one
-    self.add_vertex(edge.get_start(), [edge])
+    self.add_vertex(id, [edge])
 
 
   def valid_vertex(self, id, edges):
@@ -46,7 +47,7 @@ class Graph:
       if v.get_id() == id: return False
     # test 2: edges given all start from this vertex
     for e in edges:
-      if e.get_start().get_id() != id: return False
+      if e.get_start() != id: return False
 
     return True
 
@@ -54,10 +55,23 @@ class Graph:
     # test 1: start and end is not none
     if start is None or end is None: return False
     # test 2: weight is a number, neg, 0, pos are fine generally
-    if isinstance(weight) != int and isinstance(weight) != float: return False
+    if self.__weighted and isinstance(weight) != int and isinstance(weight) != float: return False
 
     return True
 
+  def print(self):
+    print("++++++++++++++++++++")
+    if not self.__vertices:
+      print("This is an empty graph.")
+      print("++++++++++++++++++++")
+      return
+
+    for v in self.__vertices:
+      print("Vertex ", v.get_id(), " has edges:")
+      v.print()
+      print("++++++++++++++++++++")
+
+    print(self.__vertices) # TODO: the last one at end is not being added.
 
 # ============================================================
 
@@ -67,14 +81,23 @@ class Vertex:
 
   def __init__(self, id, edges = []):
     self.__edges = edges # TODO: allow multiple edges to same thing. TODO: check if start is this vertex
-    __id = id
+    self.__id = id
 
   def get_id(self):
     return self.__id
   
   def add_edge(self, edge):
-    if edge.get_start().get_id() == self.__id:
-      self._edges.append(edge)
+    if edge.get_start() == self.__id:
+      self.__edges.append(edge)
+
+  # TODO: remove edge
+  
+  def print(self):
+    if self.__edges:
+      for e in self.__edges:
+        print("(", e.get_start(), ", ", e.get_end(), ")")
+    else:
+      print("This vertex has no edges.")
 
 # ============================================================
 
@@ -84,9 +107,9 @@ class Edge:
   __end = None
 
   def __init__(self, start, end, weight = None):
-    __weight = weight
-    __start = start
-    __end = end
+    self.__weight = weight
+    self.__start = start
+    self.__end = end
 
   def get_weight(self):
     return self.__weight
@@ -96,5 +119,8 @@ class Edge:
   
   def get_end(self):
     return self.__end
+  
+  def print(self):
+    print("(", self.__start, ", ", self.__end, ", ", self.__weight, ")")
 
 # ============================================================
