@@ -17,7 +17,8 @@ class Graph:
     print("Graph initialized.")
   
   def add_vertex(self, id, edges = []):
-    if self.valid_vertex(id, edges):
+    # print(id)
+    if self.valid_vertex(id, edges): # problem is here
       self.__vertices.append(Vertex(id, edges))
     # print("todo")
 
@@ -26,7 +27,7 @@ class Graph:
       edge = Edge(start, end, weight)
       # edge.print()
       self.add_edge_to_vertex(edge)
-      self.add_vertex(end)
+      self.add_vertex(end, [])
       self.__edges.append(edge)
     # print("todo")
 
@@ -45,9 +46,12 @@ class Graph:
     # test 1: vertex id is not already in our list
     for v in self.__vertices:
       if v.get_id() == id: return False
+    # print(id)
     # test 2: edges given all start from this vertex
+    # print(edges)
     for e in edges:
       if e.get_start() != id: return False
+    
 
     return True
 
@@ -71,7 +75,7 @@ class Graph:
       v.print()
       print("++++++++++++++++++++")
 
-    print(self.__vertices) # TODO: the last one at end is not being added.
+    # print(self.__vertices) # TODO: the last one at end is not being added.
 
 # ============================================================
 
