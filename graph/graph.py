@@ -21,8 +21,24 @@ class Graph:
       self.__vertices.append(Vertex(id, edges))
     # print("todo")
 
-  def add_edge(self, start, end, weight = None):
+  def add_edge(self, start, end, weight = None): # assuming start and end are id's of vertex
+    if self.valid_edge(start, end, weight):
+      edge = Edge(start, end, weight)
+      self.add_edge_to_vertex(edge)
+      self.add_vertex(end)
+      self.__edges.append(edge)
     print("todo")
+
+  def add_edge_to_vertex(self, edge):
+    id = edge.get_start()
+    for v in self.__vertices:
+      if v.get_id() == id:
+        v.add_edge(edge)
+        return
+
+    # vertex was not found in list, make a new one
+    self.add_vertex(edge.get_start(), [edge])
+
 
   def valid_vertex(self, id, edges):
     # test 1: vertex id is not already in our list
@@ -31,6 +47,16 @@ class Graph:
     # test 2: edges given all start from this vertex
     for e in edges:
       if e.get_start().get_id() != id: return False
+
+    return True
+
+  def valid_edge(self, start, end, weight):
+    # test 1: start and end is not none
+    if start is None or end is None: return False
+    # test 2: weight is a number, neg, 0, pos are fine generally
+    if isinstance(weight) != int and isinstance(weight) != float: return False
+
+    return True
 
 
 # ============================================================
@@ -45,6 +71,10 @@ class Vertex:
 
   def get_id(self):
     return self.__id
+  
+  def add_edge(self, edge):
+    if edge.get_start().get_id() == self.__id:
+      self._edges.append(edge)
 
 # ============================================================
 
