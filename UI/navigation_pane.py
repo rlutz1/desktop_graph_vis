@@ -30,18 +30,7 @@ class NavigationPane(QTabWidget): # generally a QWidget
     "Bellman-Ford", 
     "Dijkstra", 
     "Floyd-Warshall",
-    "Breadth-First Search",
-    "testing",
-    "yet another",
-    "testing",
-    "testing",
-    "testing",
-    "testing",
-    "testing",
-    "testing",
-    "testing",
-    "testing",
-    "testing"
+    "Breadth-First Search"
     ]
   
   __path_finding_algos = [
@@ -69,7 +58,6 @@ class NavigationPane(QTabWidget): # generally a QWidget
       button.setFlat(True)
       button.setStyleSheet("border: 5px solid black; background-color: white; min-height: 30px") # width | style | color
       button.clicked.connect(self.test)
-      # layout.insertWidget(layout.count() - 1, button)
       layout.addWidget(button)
 
     layout.addStretch()
