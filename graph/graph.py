@@ -154,8 +154,8 @@ class Vertex:
       self.__edges.append(edge)
 
   def remove_edge(self, edge):
-    if edge.get_start_id() == self.__id:
-      self.__edges.remove(edge)
+    # if edge.get_start_id() == self.__id:
+    self.__edges.remove(edge)
 
   def get_edges(self):
     return self.__edges
