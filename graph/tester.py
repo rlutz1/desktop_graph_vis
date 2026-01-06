@@ -141,11 +141,15 @@ graph_1.print()
 # graph_1.remove_vertex("2")
 # graph_1.print()
 
-graph_1.remove_vertex("Iowa")
-graph_1.print()
+# graph_1.remove_vertex("Iowa")
+# graph_1.print()
 
-graph_1.add_vertex("Iowa", [])
-graph_1.print()
+# graph_1.add_vertex("Iowa", [])
+# graph_1.print()
 
-graph_1.add_edge("1", "Iowa", 2)
+# graph_1.add_edge("1", "Iowa", 2)
+# graph_1.print()
+
+graph_1.remove_edge("Iowa", "Chicago", 0)
+# graph_1.remove_edge("Iowa", "Chicago", 0)
 graph_1.print()

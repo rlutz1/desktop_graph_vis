@@ -43,7 +43,7 @@ class Graph:
         vertex_to_remove = v
         break
     
-    if not vertex_to_remove: return
+    if not vertex_to_remove: return # just skip if for some reason id not found for now
     
     for e in vertex_to_remove.get_edges(): # remove all edges starting from this vertex
       self.__edges.remove(e)
@@ -61,6 +61,29 @@ class Graph:
     for e in delete: self.__edges.remove(e) # remove all needed removals in graph list
 
     self.__vertices.remove(vertex_to_remove) # remove from the overarching list
+
+  # main access points to remove an edge from the graph
+  # edges are identified by their start, end vertices and weight.
+  # remove the first one that matches these qualifications.
+  # we will make a decision for now to not remove the vertices just
+  # because the edge is removed.
+  # we need to remove the edge from our overarching list AND from 
+  # the list of the starting vertex.
+  def remove_edge(self, start, end, weight):
+    edge_to_remove = None
+    for e in self.__edges: # find the edge in our list
+      if start == e.get_start_id() and end == e.get_end_id() and weight == e.get_weight():
+        edge_to_remove = e
+        break
+        
+    if not edge_to_remove: return # ignore if edge isn't found by these qualifications
+
+    for v in self.__vertices: # remove edge from the starting vertex list
+      if v.get_id() == start:
+        v.remove_edge(edge_to_remove)
+        break
+
+    self.__edges.remove(edge_to_remove) # remove the edge from the overarching list
 
   # helper function to attach and edge to a vertex OR create with new edge as needed 
   def add_edge_to_vertex(self, edge, id):
