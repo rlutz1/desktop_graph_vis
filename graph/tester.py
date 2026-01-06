@@ -82,3 +82,70 @@ graph_1.print()
 # Vertex  3  has edges:
 # This vertex has no edges.
 # ++++++++++++++++++++
+
+graph_1.add_edge("Chicago", "Iowa", 0)
+graph_1.print()
+
+# ++++++++++++++++++++
+# Vertex  Iowa  has edges:
+# ( Iowa ,  Chicago )
+# ( Iowa ,  Chicago )
+# ++++++++++++++++++++
+# Vertex  Chicago  has edges:
+# ( Chicago ,  1 )
+# ( Chicago ,  Iowa )
+# ++++++++++++++++++++
+# Vertex  1  has edges:
+# ( 1 ,  2 )
+# ( 1 ,  3 )
+# ++++++++++++++++++++
+# Vertex  2  has edges:
+# This vertex has no edges.
+# ++++++++++++++++++++
+# Vertex  3  has edges:
+# This vertex has no edges.
+# ++++++++++++++++++++
+
+# graph_1.remove_vertex("Chicago")
+# graph_1.print()
+
+# ++++++++++++++++++++
+# Vertex  Iowa  has edges:
+# This vertex has no edges.
+# ++++++++++++++++++++
+# Vertex  1  has edges:
+# ( 1 ,  2 )
+# ( 1 ,  3 )
+# ++++++++++++++++++++
+# Vertex  2  has edges:
+# This vertex has no edges.
+# ++++++++++++++++++++
+# Vertex  3  has edges:
+# This vertex has no edges.
+# ++++++++++++++++++++
+
+# graph_1.remove_vertex("1")
+# graph_1.print()
+
+# ++++++++++++++++++++
+# Vertex  Iowa  has edges:
+# This vertex has no edges.
+# ++++++++++++++++++++
+# Vertex  2  has edges:
+# This vertex has no edges.
+# ++++++++++++++++++++
+# Vertex  3  has edges:
+# This vertex has no edges.
+# ++++++++++++++++++++
+
+# graph_1.remove_vertex("2")
+# graph_1.print()
+
+graph_1.remove_vertex("Iowa")
+graph_1.print()
+
+graph_1.add_vertex("Iowa", [])
+graph_1.print()
+
+graph_1.add_edge("1", "Iowa", 2)
+graph_1.print()

@@ -4,7 +4,7 @@
 # ============================================================
 
 class Graph:
-  __vertices = []
+  __vertices = [] # TODO: likely better implemented as vertices => [edges] dictionary 
   __edges = []
   __weighted = False
   __directed = False
@@ -20,7 +20,6 @@ class Graph:
   
   # main access point to add a vertex with some verification.
   def add_vertex(self, id, edges):
-    print(id, " ", edges)
     if self.valid_vertex(id, edges): # problem is here
       self.__vertices.append(Vertex(id, edges))
 
@@ -32,6 +31,36 @@ class Graph:
       self.add_edge_to_vertex(edge, start) # add this edge to the start vertex's list of edges (or create start as needed)
       self.add_vertex(end, []) # create the end vertex if needed
       self.__edges.append(edge) # append the edge to the graph's ongoing list of edges
+
+  # main access points to remove a vertex from the graph
+  # simply remove this from the vertex list, and need to remove all
+  # edges that start from this vertex from our graph list.
+  # we will remove based on a supplied vertex id.
+  def remove_vertex(self, id):
+    vertex_to_remove = None
+    for v in self.__vertices: # find vertex to remove by id
+      if v.get_id() == id:
+        vertex_to_remove = v
+        break
+    
+    if not vertex_to_remove: return
+    
+    for e in vertex_to_remove.get_edges(): # remove all edges starting from this vertex
+      self.__edges.remove(e)
+
+    delete = []
+    for e in self.__edges: # remove all edges ending at this vertex
+      if e.get_end_id() == id: 
+        # e.print()
+        for v in self.__vertices:  # remove the starting vertex reference
+          if v.get_id() == e.get_start_id():
+            v.remove_edge(e)
+
+        delete.append(e) # hold on to this is to not alter list during iteration
+
+    for e in delete: self.__edges.remove(e) # remove all needed removals in graph list
+
+    self.__vertices.remove(vertex_to_remove) # remove from the overarching list
 
   # helper function to attach and edge to a vertex OR create with new edge as needed 
   def add_edge_to_vertex(self, edge, id):
@@ -95,7 +124,12 @@ class Vertex:
     if edge.get_start_id() == self.__id:
       self.__edges.append(edge)
 
-  # TODO: remove edge
+  def remove_edge(self, edge):
+    if edge.get_start_id() == self.__id:
+      self.__edges.remove(edge)
+
+  def get_edges(self):
+    return self.__edges
   
   def print(self):
     if self.__edges:
