@@ -105,6 +105,12 @@ class Graph:
       v.print()
       print("++++++++++++++++++++")
 
+    if self.__edges:
+      print("ALL EDGES")
+      for e in self.__edges:
+        e.print()
+      print("++++++++++++++++++++")
+
 # ============================================================
 
 class Vertex:
@@ -134,7 +140,8 @@ class Vertex:
   def print(self):
     if self.__edges:
       for e in self.__edges:
-        print("(", e.get_start_id(), ", ", e.get_end_id(), ")")
+        # print("(", e.get_start_id(), ", ", e.get_end_id(), ")")
+        e.print()
     else:
       print("This vertex has no edges.")
 
