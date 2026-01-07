@@ -1,7 +1,7 @@
 import sys
 
-from UI.navigation_pane import NavigationPane
-from UI.graph_pane import GraphPane
+from UI_Components.navigation_pane import NavigationPane
+from UI_Components.graph_pane import GraphPane
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import (

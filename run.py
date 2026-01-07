@@ -1,4 +1,4 @@
-from UI.main_window import MainWindow
+from UI_Components.main_window import MainWindow
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMainWindow
 from PyQt5.QtCore import QSize, Qt
 # Only needed for access to command line arguments
