@@ -48,6 +48,7 @@ class VisualPane(QWidget): # generally a QWidget
     self._visual_area = QWidget(self)
     self._visual_area.setAcceptDrops(True)
     self._visual_area.dragEnterEvent = lambda e: e.accept()
+    self._visual_area.dropEvent = lambda e: e.source().move(e.pos())
 
     self._visual_area.setLayout(layout)
     layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
