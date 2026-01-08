@@ -1,5 +1,5 @@
-from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor
-from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor, QDrag
+from PyQt5.QtCore import Qt, QPoint, QMimeData
 from PyQt5.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -76,8 +76,10 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
       layout = QStackedLayout()
       self.setLayout(layout)
       self._vertex_text = QLabel(text, parent = self)
-      # self._vertex_text.setStyleSheet("background-color: red;")
+      # self._vertex_text.setStyleSheet("background-color: red;") # for seeing where actual label is
       self._vertex_text.setAlignment(Qt.AlignCenter)
+      self._vertex_text.setWordWrap(True)
+      self._vertex_text.setMargin(5)
 
       layout.addWidget(self._vertex_text)
       layout.addWidget(self._canvas_container)
@@ -89,6 +91,14 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
       # painter.setPen(pen)
       # painter.drawText(QPoint(self.pos().x() + self._vertex_width + 2, self.pos().y() + half_vertex_size), text)
     
+  def mouseMoveEvent(self, e):
+    if e.buttons() == Qt.MouseButton.LeftButton:
+        print("alskdnashdkasm")
+        drag = QDrag(self)
+        mime = QMimeData()
+        drag.setMimeData(mime)
+        drag.exec_(Qt.MoveAction)
+
     
 
   # this may not work, but keeping for notes for edges to always be pointing to the center of a vertex:

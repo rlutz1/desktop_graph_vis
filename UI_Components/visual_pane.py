@@ -47,8 +47,9 @@ class VisualPane(QWidget): # generally a QWidget
     # layout = QVBoxLayout()
     self._visual_area = QWidget(self)
     self._visual_area.setLayout(layout)
-    layout.addWidget(VertexWidget(self._visual_area, "something"))
-
+    layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
+    layout.addWidget(VertexWidget(self._visual_area, "something a little different as well as pie"))
+    layout.addWidget(VertexWidget(self._visual_area, "Texas"))
     # self._visual_area = QLabel()
     # canvas = QPixmap(600, 700)
     # canvas.fill(Qt.GlobalColor.white)
