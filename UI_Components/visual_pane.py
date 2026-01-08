@@ -1,3 +1,5 @@
+from PyQt5.QtGui import QPixmap, QPainter
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -39,6 +41,16 @@ class VisualPane(QWidget): # generally a QWidget
   # initialize the general visual area
   def _init_visual_area(self):
     self._visual_area = QWidget()
+    # self._visual_area = QLabel()
+    # canvas = QPixmap(600, 700)
+    # canvas.fill(Qt.GlobalColor.white)
+    # self._visual_area.setPixmap(canvas)
+
+    # canvas = self._visual_area.pixmap()
+    # painter = QPainter(canvas)
+    # painter.drawLine(10, 10, 300, 200)
+    # painter.end()
+    # self._visual_area.setPixmap(canvas)
 
   # initialize the button/interaction with visual and sim area
   def _init_interaction_area(self):
@@ -63,12 +75,14 @@ class VisualPane(QWidget): # generally a QWidget
     layout.addWidget(self._visual_area)
     layout.addWidget(self._interaction_area)
 
+  # change the stylesheet for the interaction area as a whole
   def _get_interaction_area_style(self):
     return """
       background-color: #a2c8fa; 
       max-width: 150px;
       """
   
+  # change style of the interaction buttons
   def _get_interaction_button_style(self):
     return """
       background-color: grey; 
