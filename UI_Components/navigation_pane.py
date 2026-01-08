@@ -55,8 +55,8 @@ class NavigationPane(QTabWidget): # generally a QWidget
     
     for a in algorithms:
       button = QPushButton(a)
-      button.setFlat(True)
-      button.setStyleSheet("border: 5px solid black; background-color: white; min-height: 30px") # width | style | color
+      # button.setFlat(True)
+      button.setStyleSheet("font: bold 1.5rem \"Fira Sans\", serif; background-color: grey; min-height: 30px") # width | style | color
       button.clicked.connect(self.test)
       layout.addWidget(button)
 
