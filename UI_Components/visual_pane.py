@@ -1,3 +1,5 @@
+from UI_Components.Graph.graph_visual import VertexWidget
+
 from PyQt5.QtGui import QPixmap, QPainter
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
@@ -19,6 +21,7 @@ from PyQt5.QtWidgets import (
     QSlider,
     QSpinBox,
     QTimeEdit,
+    QStackedLayout,
     QVBoxLayout,
     QHBoxLayout,
     QLayout,
@@ -40,7 +43,12 @@ class VisualPane(QWidget): # generally a QWidget
   
   # initialize the general visual area
   def _init_visual_area(self):
-    self._visual_area = QWidget()
+    layout = QStackedLayout()
+    # layout = QVBoxLayout()
+    self._visual_area = QWidget(self)
+    self._visual_area.setLayout(layout)
+    layout.addWidget(VertexWidget(self._visual_area, "something"))
+
     # self._visual_area = QLabel()
     # canvas = QPixmap(600, 700)
     # canvas.fill(Qt.GlobalColor.white)
@@ -55,7 +63,7 @@ class VisualPane(QWidget): # generally a QWidget
   # initialize the button/interaction with visual and sim area
   def _init_interaction_area(self):
     layout = QVBoxLayout()
-    self._interaction_area = QWidget()
+    self._interaction_area = QWidget(self)
     self._interaction_area.setLayout(layout)
     self._init_interactions(layout)
     layout.addStretch() # top heavy layout
