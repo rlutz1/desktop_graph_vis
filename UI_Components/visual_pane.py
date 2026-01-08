@@ -46,6 +46,9 @@ class VisualPane(QWidget): # generally a QWidget
     layout = QStackedLayout()
     # layout = QVBoxLayout()
     self._visual_area = QWidget(self)
+    self._visual_area.setAcceptDrops(True)
+    self._visual_area.dragEnterEvent = lambda e: e.accept()
+
     self._visual_area.setLayout(layout)
     layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
     layout.addWidget(VertexWidget(self._visual_area, "something a little different as well as pie"))
@@ -99,6 +102,8 @@ class VisualPane(QWidget): # generally a QWidget
       min-height: 30px;
       """
 
+  # def dragEnterEvent(self, e):
+  #   e.accept()
   
 
 
