@@ -41,6 +41,7 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
   _canvas_container = None
   _vertex_text = None
   _vertex_size = 100 # px x px
+  _half_vertex_size = _vertex_size // 2
   _vertex_width = 3 # px width of the drawn circle
   _background_color = QColor(255, 255, 255) # white by default
   _vertex_color = QColor(0, 0, 0) # black by default
@@ -67,10 +68,10 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
     pen.setColor(self._vertex_color) 
     painter.setPen(pen)
 
-    half_vertex_size = self._vertex_size // 2 # for center of canvas positioning
-    circle_radius = half_vertex_size - self._vertex_width # for fitting within the canvas including pen size
-    center = QPoint(self.pos().x() + half_vertex_size, self.pos().y() + half_vertex_size)
-    painter.drawEllipse(center, circle_radius, circle_radius)
+    # half_vertex_size = self._vertex_size // 2 # for center of canvas positioning
+    circle_radius = self._half_vertex_size - self._vertex_width # for fitting within the canvas including pen size
+
+    painter.drawEllipse(self.center(), circle_radius, circle_radius)
     
     painter.end()
     self._canvas_container.setPixmap(canvas)
@@ -114,8 +115,8 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
 
   def center(self):
     # return self.rect().center()
-    half_vertex_size = self._vertex_size // 2 # for center of canvas positioning
-    return QPoint(self.pos().x() + half_vertex_size, self.pos().y() + half_vertex_size)
+    # half_vertex_size = self._vertex_size // 2 # for center of canvas positioning
+    return QPoint(self.pos().x() + self._half_vertex_size, self.pos().y() + self._half_vertex_size)
 
 
     
