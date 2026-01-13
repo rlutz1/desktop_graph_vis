@@ -83,28 +83,28 @@ class Action():
   def action(self):
     print("Empty action, should not use this directly. Override in child class.")
 
-class GraphEditAction(Action):
+class GraphEditAction():
 
-  def __init__(self):
-    super().__init__()
+  # def __init__(self):
+  #   super().__init__()
 
   def action(self):
     print("It worked!")
 
-class ChangeAction(Action):
+class ChangeAction():
 
-  def __init__(self):
-    super().__init__()
+  # def __init__(self):
+  #   super().__init__()
 
   def action(self):
     print("CHANGED")
 
-class TestAction(Action):
+class TestAction():
 
   _root = None
 
   def __init__(self, root):
-    super().__init__()
+    # super().__init__()
     self._root = root
 
 

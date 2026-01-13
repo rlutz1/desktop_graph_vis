@@ -118,16 +118,16 @@ class InteractionArea(QWidget):
 
 class InteractionButton(QPushButton):
 
-  # _action = None
+  _action = None
 
   def __init__(self, text, parent):
     super().__init__(text = text, parent = parent) # super initialization
     self.setStyleSheet(self._get_interaction_button_style())
 
   def add_push_action(self, action):
-    # self._action = action # likely unnecessary.
-    # self.clicked.connect(self._action.action)
-    self.clicked.connect(action.action)
+    self._action = action # likely unnecessary.
+    self.clicked.connect(self._action.action)
+    # self.clicked.connect(action.action)
     # action.action()
 
   
