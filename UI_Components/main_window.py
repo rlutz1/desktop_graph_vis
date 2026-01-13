@@ -24,26 +24,72 @@ from PyQt5.QtWidgets import (
 
 class MainWindow(QMainWindow): # inherits from QMainWIndow
   
-
+  _navigation_pane = None # pane used specifically for navigating through algorithms
+  _visual_pane = None # pane used for editing and animating the data struct
+  _width = 1000
+  _height = 500
+  
+  
   def __init__(self):
     super().__init__() # call to Qmain window super
-    self.setup_window() # setup the window meta info
+    self._init_window() # 1. setup the window meta info
+    self._init_actions()# 2. initialize window actions 
 
-  def setup_window(self):
+
+  def _init_window(self):
     self.setWindowTitle("Graph Algorithm Visualizer") # basic title
-    self.setMinimumSize(QSize(1000, 500))
+    self.setMinimumSize(QSize(self._width, self._height))
     
-    central_space = QWidget()
-    # central_space.setStyleSheet("")
+    central_space = QWidget(parent = self)
     layout = QHBoxLayout()
-   
-    layout.addWidget(NavigationPane(self))
-    layout.addWidget(VisualPane(self)) # placeholder
+
+    self._navigation_pane = NavigationPane(self)
+    self._visual_pane = VisualPane(self)
+
+    layout.addWidget(self._navigation_pane)
+    layout.addWidget(self._visual_pane)
     central_space.setLayout(layout)
 
     self.setCentralWidget(central_space)
 
+  # main window is our "controller", so to speak.
+  # it is allowed to attach actions to front end portions.
+  def _init_actions(self):
+    self._init_edit(GraphEditAction())
+    self._init_reset(TestAction(self))
+    
+  def _init_edit(self, action):
+    self._visual_pane.set_edit_action(action)
+    
+  def _init_reset(self, action):
+    self._visual_pane.set_reset_action(action)
 
+  # getters
+  def width(self):
+    return self._width
+  
+  def height(self):
+    return self._height
+
+class GraphEditAction():
+  def action(self):
+    print("It worked!")
+
+class ChangeAction():
+  def action(self):
+    print("CHANGED")
+
+class TestAction():
+
+  window = None
+
+  def __init__(self, window):
+    self.window = window
+
+
+  def action(self):
+    print("Test action, reporting for duty")
+    self.window._init_edit(ChangeAction())
     # ANIMATION EXAMPLE FOR NOTES
 
     # class Window(QWidget):

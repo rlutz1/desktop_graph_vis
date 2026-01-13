@@ -29,12 +29,13 @@ from PyQt5.QtWidgets import (
     QTabWidget
 )
 
+
+# the entire visualization pane. this contains the 
+# visual pane and the interaction area.
 class VisualPane(QWidget): # generally a QWidget
 
   _visual_area = None
   _interaction_area = None
-  _canvas_container = None
-  _interactions = ["Edit", "Play", "Step", "Reset"]
 
   # sloppy, for testing only:
   _visual_edges = []
@@ -44,99 +45,46 @@ class VisualPane(QWidget): # generally a QWidget
     self._init_visual_area()
     self._init_interaction_area()
     self._init_visual_pane()
-    print(self.size())
-    
-    print(self._visual_area.size())
-    print(self._interaction_area.size())
-  
-  # initialize the general visual area
-  def _init_visual_area(self):
-    # layout = QStackedLayout()
-    # layout = QVBoxLayout()
-    # self._visual_area = QWidget(self)
-    # self._visual_area.setStyleSheet("min-width: 1000px;")
-    # self._visual_area.setAcceptDrops(True)
-    # self._visual_area.dragEnterEvent = lambda e: e.accept()
-    # self._visual_area.dropEvent = lambda e: e.source().move(e.pos())
 
-    # self._visual_area.setLayout(layout)
-    # layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
-    self._visual_area = VisualArea(self)
-
+    # playground:
     v1 = VertexWidget(self._visual_area, "Iowa")
     v2 = VertexWidget(self._visual_area, "Texas")
 
-     
-    
-
-    # self._visual_area.setMinimumSize(QSize(750, 500)) # TODO: fix this hardcoded sizing sloppiness
-   
-    # canvas = self._canvas_container.pixmap()
-
-    # layout.addWidget(v1)
-    # layout.addWidget(v2)
     self._visual_area.add_vertex(v1)    
     self._visual_area.add_vertex(v2)  
-    # layout.addWidget(self._canvas_container)
 
     self._visual_area.add_edge(v1, v2, 0)
 
-    
-
-    # self._visual_area = QLabel()
-    # canvas = QPixmap(600, 700)
-    # canvas.fill(Qt.GlobalColor.white)
-    # self._visual_area.setPixmap(canvas)
-
-    # canvas = self._visual_area.pixmap()
-    # painter = QPainter(canvas)
-    # painter.drawLine(10, 10, 300, 200)
-    # painter.end()
-    # self._visual_area.setPixmap(canvas)
+    v3 = VertexWidget(self._visual_area, "Colorado")
+    self._visual_area.add_edge(v3, v2, 0)
+   
+  # initialize the general visual area
+  def _init_visual_area(self):
+    self._visual_area = VisualArea(self)
 
   # initialize the button/interaction with visual and sim area
   def _init_interaction_area(self):
-    layout = QVBoxLayout()
-    self._interaction_area = QWidget(self)
-    self._interaction_area.setLayout(layout)
-    self._init_interactions(layout)
-    layout.addStretch() # top heavy layout
-    self._interaction_area.setStyleSheet(self._get_interaction_area_style())
-  
-  # initialize the buttons that will populate the interaction zone
-  def _init_interactions(self, layout):
-    for i in self._interactions:
-      button = QPushButton(i)
-      button.setStyleSheet(self._get_interaction_button_style())
-      layout.addWidget(button)
+    self._interaction_area = InteractionArea(self)
 
   # initialize the final pane
   def _init_visual_pane(self):
+    self.setMinimumSize(self.parent().size())
     layout = QHBoxLayout()
     self.setLayout(layout)
     layout.addWidget(self._visual_area)
     layout.addWidget(self._interaction_area)
 
-  # change the stylesheet for the interaction area as a whole
-  def _get_interaction_area_style(self):
-    return """
-      background-color: #a2c8fa; 
-      max-width: 150px;
-      """
+  # set the edit button action
+  def set_edit_action(self, action):
+    return self._interaction_area.set_edit(action)
   
-  # change style of the interaction buttons
-  def _get_interaction_button_style(self):
-    return """
-      background-color: grey; 
-      font: italic 1.5rem "Fira Sans", serif;
-      min-height: 30px;
-      """
+  # set the reset button action
+  def set_reset_action(self, action):
+    return self._interaction_area.set_reset(action)
 
-  # def dragEnterEvent(self, e):
-  #   e.accept()
-  
-
-
+ 
+# encapsulation of the visualization area. 
+# TODO this is specific to graph for now.
 class VisualArea(QWidget):
 
   _canvas_container = None
@@ -190,11 +138,6 @@ class VisualArea(QWidget):
 
   def _update_canvas(self):
 
-    # canvas = self._canvas_container.pixmap()
-    # self._canvas_container.setPixmap(QPixmap())
-    # canvas.clear()
-
-    # self._canvas_container.clear()
     canvas = QPixmap(self.size())
     canvas.fill(QColor(255, 255, 255))
     
@@ -216,8 +159,68 @@ class VisualArea(QWidget):
 
     print(self._visual_edges)
 
+# encapsulating the simple interaction area
+# for the algorithm. 
+class InteractionArea(QWidget):
+   
+  EDIT_ID = "Edit"
+  PLAY_ID = "Play"
+  STEP_ID = "Step"
+  RESET_ID = "Reset"
 
+  _interactions = {
+    EDIT_ID: None, 
+    PLAY_ID: None, 
+    STEP_ID: None,
+    RESET_ID: None
+    }
+                   
+  def __init__(self, parent):
+    super().__init__(parent) # super initialization
+    layout = QVBoxLayout()
+    self.setLayout(layout)
+    self._init_interactions(layout)
+    layout.addStretch() # top heavy layout
+    self.setStyleSheet(self._get_interaction_area_style())
+  
+  # initialize the buttons that will populate the interaction zone
+  def _init_interactions(self, layout):
+    for i in self._interactions:
+      button = InteractionButton(text = i, parent = self)
+      self._interactions[i] = button
+      layout.addWidget(button)
 
-  # def updateEdge(self, src, dest, weight):
-  #   # self._visual_edges[src].append(des
-  #   print()
+  # change the stylesheet for the interaction area as a whole
+  def _get_interaction_area_style(self):
+    return """
+      background-color: #a2c8fa; 
+      max-width: 150px;
+      """
+  
+  # testing idea
+  def set_edit(self, action):
+    self._interactions[self.EDIT_ID].add_push_action(action)
+
+  # testing idea
+  def set_reset(self, action):
+    self._interactions[self.RESET_ID].add_push_action(action)
+
+class InteractionButton(QPushButton):
+
+  _action = None
+
+  def __init__(self, parent, text):
+    super().__init__(text = text, parent = parent) # super initialization
+    self.setStyleSheet(self._get_interaction_button_style())
+
+  def add_push_action(self, action):
+    self._action = action
+    self.clicked.connect(self._action.action)
+  
+  # change style of the interaction buttons
+  def _get_interaction_button_style(self):
+    return """
+      background-color: grey; 
+      font: italic 1.5rem "Fira Sans", serif;
+      min-height: 30px;
+      """
