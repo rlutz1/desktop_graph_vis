@@ -77,34 +77,34 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
 
 class Action():
 
-  def __init__(self):
+  def __init__(self): 
     pass
 
   def action(self):
     print("Empty action, should not use this directly. Override in child class.")
 
-class GraphEditAction():
+class GraphEditAction(Action):
 
-  # def __init__(self):
-  #   super().__init__()
+  def __init__(self):
+    super().__init__()
 
   def action(self):
     print("It worked!")
 
-class ChangeAction():
+class ChangeAction(Action):
 
-  # def __init__(self):
-  #   super().__init__()
+  def __init__(self):
+    super().__init__()
 
   def action(self):
     print("CHANGED")
 
-class TestAction():
+class TestAction(Action):
 
   _root = None
 
   def __init__(self, root):
-    # super().__init__()
+    super().__init__()
     self._root = root
 
 
