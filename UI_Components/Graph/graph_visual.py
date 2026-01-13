@@ -102,7 +102,7 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
         pixmap = QPixmap(self.size())
         self.render(pixmap)
         drag.setPixmap(pixmap)
-        drag.exec_(Qt.MoveAction)
+        drag.exec_(Qt.DropAction.MoveAction)
         # self.move(e.pos()) # messes her up, do not use, not proper.
 
   # just give it a tuple for start and end, weight can just be number. 

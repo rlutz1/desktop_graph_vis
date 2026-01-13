@@ -1,6 +1,6 @@
 from UI_Components.Graph.graph_visual import VertexWidget
 
-from PyQt5.QtGui import QPixmap, QPainter, QColor
+from PyQt5.QtGui import QPixmap, QPainter, QColor, QPen
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import (
     QApplication,
@@ -36,6 +36,9 @@ class VisualPane(QWidget): # generally a QWidget
   _canvas_container = None
   _interactions = ["Edit", "Play", "Step", "Reset"]
 
+  # sloppy, for testing only:
+  _visual_edges = []
+
   def __init__(self, parent):
     super().__init__(parent) # super initialization
     self._init_visual_area()
@@ -48,33 +51,36 @@ class VisualPane(QWidget): # generally a QWidget
   
   # initialize the general visual area
   def _init_visual_area(self):
-    layout = QStackedLayout()
+    # layout = QStackedLayout()
     # layout = QVBoxLayout()
-    self._visual_area = QWidget(self)
+    # self._visual_area = QWidget(self)
     # self._visual_area.setStyleSheet("min-width: 1000px;")
-    self._visual_area.setAcceptDrops(True)
-    self._visual_area.dragEnterEvent = lambda e: e.accept()
-    self._visual_area.dropEvent = lambda e: e.source().move(e.pos())
+    # self._visual_area.setAcceptDrops(True)
+    # self._visual_area.dragEnterEvent = lambda e: e.accept()
+    # self._visual_area.dropEvent = lambda e: e.source().move(e.pos())
 
-    self._visual_area.setLayout(layout)
-    layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
+    # self._visual_area.setLayout(layout)
+    # layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
+    self._visual_area = VisualArea(self)
+
     v1 = VertexWidget(self._visual_area, "Iowa")
     v2 = VertexWidget(self._visual_area, "Texas")
-    
-    
+
+     
     
 
-    self._visual_area.setMinimumSize(QSize(750, 500))
-    self._canvas_container = QLabel(parent = self._visual_area)
-    canvas = QPixmap(self._visual_area.size())
-    
-    canvas.fill(QColor(255, 255, 255))
-    self._canvas_container.setPixmap(canvas)
-    canvas = self._canvas_container.pixmap()
+    # self._visual_area.setMinimumSize(QSize(750, 500)) # TODO: fix this hardcoded sizing sloppiness
+   
+    # canvas = self._canvas_container.pixmap()
 
-    layout.addWidget(v1)
-    layout.addWidget(v2)
-    layout.addWidget(self._canvas_container)
+    # layout.addWidget(v1)
+    # layout.addWidget(v2)
+    self._visual_area.addVertex(v1)    
+    self._visual_area.addVertex(v2)  
+    # layout.addWidget(self._canvas_container)
+
+
+    
 
     # self._visual_area = QLabel()
     # canvas = QPixmap(600, 700)
@@ -128,5 +134,49 @@ class VisualPane(QWidget): # generally a QWidget
   # def dragEnterEvent(self, e):
   #   e.accept()
   
+class VisualArea(QWidget):
 
+  _canvas_container = None
 
+  def __init__(self, parent):
+    super().__init__(parent) # super initialization
+    self.setMinimumSize(QSize(750, 500))
+
+    self.setAcceptDrops(True)
+    # self.dragEnterEvent = lambda e: e.accept()
+    # self._visual_area.dropEvent = lambda e: e.source().move(e.pos())
+    layout = QStackedLayout()
+    self.setLayout(layout)
+    layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
+
+    self._canvas_container = QLabel(parent = self)
+    canvas = QPixmap(self.size())
+    
+    canvas.fill(QColor(255, 255, 255))
+    self._canvas_container.setPixmap(canvas)
+    layout.addWidget(self._canvas_container)
+  
+  def dragEnterEvent(self, e):
+    e.accept()
+
+  def dropEvent(self, e):
+     e.source().move(e.pos())
+
+  def addVertex(self, v):
+    self.layout().addWidget(v)
+    self.layout().setCurrentWidget(v)
+
+  def addEdge(self, v1, v2):
+    # this is going to be written as a long script basically, 
+    # but needs to be cleaned into clear functionality.
+    # below, let's add an edge between v1 and v2.
+    # this will mean drawing a line between the 2 to start.
+
+    canvas = self._canvas_container.pixmap()
+    painter = QPainter(canvas)
+    pen = QPen()
+    pen.setWidth(3)
+    pen.setColor(QColor(255, 0, 0)) # red for now. 
+    painter.setPen(pen)
+
+    painter.drawLine(v1.pos().x(), v1.pos().y(), v2.pos().x(), v2.pos().y())
