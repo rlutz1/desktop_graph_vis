@@ -167,6 +167,7 @@ class VisualArea(QWidget):
   def dropEvent(self, e):
      e.source().move(e.pos())
      self._update_canvas()
+     
 
   def add_vertex(self, v):
     self.layout().addWidget(v)
@@ -193,12 +194,10 @@ class VisualArea(QWidget):
     # self._canvas_container.setPixmap(QPixmap())
     # canvas.clear()
 
-    self._canvas_container.clear()
-
+    # self._canvas_container.clear()
     canvas = QPixmap(self.size())
     canvas.fill(QColor(255, 255, 255))
     
-
     painter = QPainter(canvas)
     pen = QPen()
     pen.setWidth(3)
@@ -207,11 +206,13 @@ class VisualArea(QWidget):
 
     for src in self._visual_edges:
       for dest in self._visual_edges[src]:
-        painter.drawLine(src.pos().x(), src.pos().y(), dest.pos().x(), dest.pos().y())
+        # painter.drawLine(src.pos().x(), src.pos().y(), dest.pos().x(), dest.pos().y())
+        painter.drawLine(src.center(), dest.center())
 
     painter.end()
 
-    self._canvas_container.setPixmap(canvas)
+    self._canvas_container.pixmap().swap(canvas)
+    self._canvas_container.update()
 
     print(self._visual_edges)
 

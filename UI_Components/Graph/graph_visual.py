@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor, QDrag
-from PyQt5.QtCore import Qt, QPoint, QMimeData
+from PyQt5.QtCore import Qt, QPoint, QMimeData, QSize
 from PyQt5.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -47,7 +47,9 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
 
   def __init__(self, parent, text = None): 
     super().__init__(parent) # call to QWidget window super with parent widget
-    self.setStyleSheet("max-width: 100px; max-height: 100px;")
+    # self.setStyleSheet("max-width: 100px; max-height: 100px;")
+    self.setMaximumSize(QSize(100, 100))
+    self.setMinimumSize(QSize(100, 100))
     self._draw_vertex(text)
 
   # draw the vertex within this widget. we will use a canvas for more flexibility.
@@ -109,6 +111,11 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
   # we need to draw the line... anything else?
   def add_edge(self, start, end, weight):
     print()
+
+  def center(self):
+    # return self.rect().center()
+    half_vertex_size = self._vertex_size // 2 # for center of canvas positioning
+    return QPoint(self.pos().x() + half_vertex_size, self.pos().y() + half_vertex_size)
 
 
     
