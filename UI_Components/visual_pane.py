@@ -75,10 +75,11 @@ class VisualPane(QWidget): # generally a QWidget
 
     # layout.addWidget(v1)
     # layout.addWidget(v2)
-    self._visual_area.addVertex(v1)    
-    self._visual_area.addVertex(v2)  
+    self._visual_area.add_vertex(v1)    
+    self._visual_area.add_vertex(v2)  
     # layout.addWidget(self._canvas_container)
 
+    self._visual_area.add_edge(v1, v2, 0)
 
     
 
@@ -134,21 +135,25 @@ class VisualPane(QWidget): # generally a QWidget
   # def dragEnterEvent(self, e):
   #   e.accept()
   
+
+
 class VisualArea(QWidget):
 
   _canvas_container = None
+  _visual_edges = {} # map of vertex to edges stemming from source
 
   def __init__(self, parent):
     super().__init__(parent) # super initialization
-    self.setMinimumSize(QSize(750, 500))
+    self.setAcceptDrops(True) # for the drag and drop function
+    
+    self.setMinimumSize(QSize(750, 500)) # for now, hard coded, TODO
 
-    self.setAcceptDrops(True)
-    # self.dragEnterEvent = lambda e: e.accept()
-    # self._visual_area.dropEvent = lambda e: e.source().move(e.pos())
-    layout = QStackedLayout()
+    # init the stack pane layout functionality
+    layout = QStackedLayout() 
     self.setLayout(layout)
     layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
 
+    # init the canvas used for drawing the edges 
     self._canvas_container = QLabel(parent = self)
     canvas = QPixmap(self.size())
     
@@ -161,22 +166,57 @@ class VisualArea(QWidget):
 
   def dropEvent(self, e):
      e.source().move(e.pos())
+     self._update_canvas()
 
-  def addVertex(self, v):
+  def add_vertex(self, v):
     self.layout().addWidget(v)
     self.layout().setCurrentWidget(v)
 
-  def addEdge(self, v1, v2):
-    # this is going to be written as a long script basically, 
-    # but needs to be cleaned into clear functionality.
+  # for the moment, accepts VertexWidgets since this is mostly called
+  # when an edge is added/changed
+  def add_edge(self, src, dest, weight):
     # below, let's add an edge between v1 and v2.
     # this will mean drawing a line between the 2 to start.
 
-    canvas = self._canvas_container.pixmap()
+    if src in self._visual_edges: # if we already have this edge
+      self._visual_edges.append(dest) # append the destination to list of ongoing
+    else: # if we are adding this new edge
+      # we don't have src in dictionary, add with dest edge
+      self._visual_edges[src] = [dest] 
+      
+    # now, we need to update the canvas
+    self._update_canvas()
+
+  def _update_canvas(self):
+
+    # canvas = self._canvas_container.pixmap()
+    # self._canvas_container.setPixmap(QPixmap())
+    # canvas.clear()
+
+    self._canvas_container.clear()
+
+    canvas = QPixmap(self.size())
+    canvas.fill(QColor(255, 255, 255))
+    
+
     painter = QPainter(canvas)
     pen = QPen()
     pen.setWidth(3)
     pen.setColor(QColor(255, 0, 0)) # red for now. 
     painter.setPen(pen)
 
-    painter.drawLine(v1.pos().x(), v1.pos().y(), v2.pos().x(), v2.pos().y())
+    for src in self._visual_edges:
+      for dest in self._visual_edges[src]:
+        painter.drawLine(src.pos().x(), src.pos().y(), dest.pos().x(), dest.pos().y())
+
+    painter.end()
+
+    self._canvas_container.setPixmap(canvas)
+
+    print(self._visual_edges)
+
+
+
+  # def updateEdge(self, src, dest, weight):
+  #   # self._visual_edges[src].append(des
+  #   print()
