@@ -55,13 +55,15 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
   # main window is our "controller", so to speak.
   # it is allowed to attach actions to front end portions.
   def _init_actions(self):
-    self._init_edit(GraphEditAction())
-    self._init_reset(TestAction(self))
+    self.set_edit_action(GraphEditAction())
+    self.set_reset_action(TestAction(self))
     
-  def _init_edit(self, action):
+  # general access to set the edit action
+  def set_edit_action(self, action):
     self._visual_pane.set_edit_action(action)
     
-  def _init_reset(self, action):
+  # general access to set the reset action
+  def set_reset_action(self, action):
     self._visual_pane.set_reset_action(action)
 
   # getters
@@ -71,25 +73,48 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
   def height(self):
     return self._height
 
-class GraphEditAction():
+# 
+
+class Action():
+
+  def __init__(self):
+    pass
+
+  def action(self):
+    print("Empty action, should not use this directly. Override in child class.")
+
+class GraphEditAction(Action):
+
+  def __init__(self):
+    super().__init__()
+
   def action(self):
     print("It worked!")
 
-class ChangeAction():
+class ChangeAction(Action):
+
+  def __init__(self):
+    super().__init__()
+
   def action(self):
     print("CHANGED")
 
-class TestAction():
+class TestAction(Action):
 
-  window = None
+  _root = None
 
-  def __init__(self, window):
-    self.window = window
+  def __init__(self, root):
+    super().__init__()
+    self._root = root
 
 
   def action(self):
     print("Test action, reporting for duty")
-    self.window._init_edit(ChangeAction())
+    self._root.set_edit_action(ChangeAction())
+
+
+
+
     # ANIMATION EXAMPLE FOR NOTES
 
     # class Window(QWidget):
