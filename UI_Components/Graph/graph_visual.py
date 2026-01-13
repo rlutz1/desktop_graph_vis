@@ -37,6 +37,7 @@ from PyQt5.QtWidgets import (
 
 class VertexWidget(QWidget): # Qlabel can hold the canvas
 
+  _edge_visuals = []
   _canvas_container = None
   _vertex_text = None
   _vertex_size = 100 # px x px
@@ -93,11 +94,22 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
     
   def mouseMoveEvent(self, e):
     if e.buttons() == Qt.MouseButton.LeftButton:
-        print("alskdnashdkasm")
+        # print("alskdnashdkasm") # for testing only.
         drag = QDrag(self)
         mime = QMimeData()
         drag.setMimeData(mime)
+
+        pixmap = QPixmap(self.size())
+        self.render(pixmap)
+        drag.setPixmap(pixmap)
         drag.exec_(Qt.MoveAction)
+        # self.move(e.pos()) # messes her up, do not use, not proper.
+
+  # just give it a tuple for start and end, weight can just be number. 
+  # we need to draw the line... anything else?
+  def add_edge(self, start, end, weight):
+    print()
+
 
     
 
@@ -109,4 +121,54 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
   # By default, this property contains a position that refers to the origin 
   def get_position(self):
     return self.pos()
+  
+# an EDGE visual representation
+class EdgeWidget(QWidget):
+
+  _canvas_container = None
+  _edge_text = None
+  # __size = 100 # px x px
+  _edge_width = 3 # px width of the drawn line
+  _background_color = QColor(255, 255, 255) # white by default
+  _edge_color = QColor(0, 0, 0) # black by default
+
+  def __init__(self, parent, weight = None): 
+    super().__init__(parent) # call to QWidget window super with parent widget
+    self.setStyleSheet("")
+    self._draw_edge(weight) 
+
+  def _draw_edge(self, text):
+    self._canvas_container = QLabel(parent = self)
+    canvas = QPixmap(self._vertex_size, self._vertex_size)
+    canvas.fill(self._background_color)
+    self._canvas_container.setPixmap(canvas)
+    canvas = self._canvas_container.pixmap()
+
+    painter = QPainter(canvas)
+    pen = QPen()
+    pen.setWidth(self._edge_width)
+    pen.setColor(self._edge_color) 
+    painter.setPen(pen)
+
+    half_vertex_size = self._vertex_size // 2 # for center of canvas positioning
+    circle_radius = half_vertex_size - self._vertex_width # for fitting within the canvas including pen size
+    center = QPoint(self.pos().x() + half_vertex_size, self.pos().y() + half_vertex_size)
+    painter.drawEllipse(center, circle_radius, circle_radius)
+    
+    painter.end()
+    self._canvas_container.setPixmap(canvas)
+
+    if text is not None:
+      layout = QStackedLayout()
+      self.setLayout(layout)
+      self._vertex_text = QLabel(text, parent = self)
+      # self._vertex_text.setStyleSheet("background-color: red;") # for seeing where actual label is
+      self._vertex_text.setAlignment(Qt.AlignCenter)
+      self._vertex_text.setWordWrap(True)
+      self._vertex_text.setMargin(5)
+
+      layout.addWidget(self._vertex_text)
+      layout.addWidget(self._canvas_container)
+      
+      layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
 

@@ -1,7 +1,7 @@
 from UI_Components.Graph.graph_visual import VertexWidget
 
-from PyQt5.QtGui import QPixmap, QPainter
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap, QPainter, QColor
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -33,6 +33,7 @@ class VisualPane(QWidget): # generally a QWidget
 
   _visual_area = None
   _interaction_area = None
+  _canvas_container = None
   _interactions = ["Edit", "Play", "Step", "Reset"]
 
   def __init__(self, parent):
@@ -40,20 +41,41 @@ class VisualPane(QWidget): # generally a QWidget
     self._init_visual_area()
     self._init_interaction_area()
     self._init_visual_pane()
+    print(self.size())
+    
+    print(self._visual_area.size())
+    print(self._interaction_area.size())
   
   # initialize the general visual area
   def _init_visual_area(self):
     layout = QStackedLayout()
     # layout = QVBoxLayout()
     self._visual_area = QWidget(self)
+    # self._visual_area.setStyleSheet("min-width: 1000px;")
     self._visual_area.setAcceptDrops(True)
     self._visual_area.dragEnterEvent = lambda e: e.accept()
     self._visual_area.dropEvent = lambda e: e.source().move(e.pos())
 
     self._visual_area.setLayout(layout)
     layout.setStackingMode(QStackedLayout.StackingMode.StackAll)
-    layout.addWidget(VertexWidget(self._visual_area, "something a little different as well as pie"))
-    layout.addWidget(VertexWidget(self._visual_area, "Texas"))
+    v1 = VertexWidget(self._visual_area, "Iowa")
+    v2 = VertexWidget(self._visual_area, "Texas")
+    
+    
+    
+
+    self._visual_area.setMinimumSize(QSize(750, 500))
+    self._canvas_container = QLabel(parent = self._visual_area)
+    canvas = QPixmap(self._visual_area.size())
+    
+    canvas.fill(QColor(255, 255, 255))
+    self._canvas_container.setPixmap(canvas)
+    canvas = self._canvas_container.pixmap()
+
+    layout.addWidget(v1)
+    layout.addWidget(v2)
+    layout.addWidget(self._canvas_container)
+
     # self._visual_area = QLabel()
     # canvas = QPixmap(600, 700)
     # canvas.fill(Qt.GlobalColor.white)
