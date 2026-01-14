@@ -28,6 +28,8 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
   _visual_pane = None # pane used for editing and animating the data struct
   _width = 1000
   _height = 500
+
+  _curr_algorithm = None
   
   
   def __init__(self):
@@ -84,7 +86,7 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
   def height(self):
     return self._height
 
-# 
+# ====================================================================
 
 class Action():
 
@@ -94,6 +96,14 @@ class Action():
   def action(self):
     print("Empty action, should not use this directly. Override in child class.")
 
+# let's focus in on this.
+# we need to be able to:
+# 1. add a vertex
+# 2. remove a vertex
+# 3. add an edge
+# 4. remove an edge
+# and have this both reflected on necessary backend structures
+# and provide the visual feedback necessary to correspond.
 class GraphEditAction(Action):
 
   def __init__(self):
