@@ -62,11 +62,19 @@ class VisualPane(QWidget): # generally a QWidget
 
   # set the edit button action
   def set_edit_action(self, action):
-    return self._interaction_area.set_edit(action)
+    self._interaction_area.set_interaction_button_action(action, self._interaction_area.EDIT_ID)
   
   # set the reset button action
   def set_reset_action(self, action):
-    return self._interaction_area.set_reset(action)
+    self._interaction_area.set_interaction_button_action(action, self._interaction_area.RESET_ID)
+
+  # set the play button action
+  def set_play_action(self, action):
+    self._interaction_area.set_interaction_button_action(action, self._interaction_area.PLAY_ID)
+
+  # set the step button action
+  def set_step_action(self, action):
+    self._interaction_area.set_interaction_button_action(action, self._interaction_area.STEP_ID)
 
 
 # encapsulating the simple interaction area
@@ -78,7 +86,7 @@ class InteractionArea(QWidget):
   STEP_ID = "Step"
   RESET_ID = "Reset"
 
-  _interactions = {
+  _interaction_buttons = {
     EDIT_ID: None, 
     PLAY_ID: None, 
     STEP_ID: None,
@@ -95,9 +103,9 @@ class InteractionArea(QWidget):
   
   # initialize the buttons that will populate the interaction zone
   def _init_interactions(self, layout):
-    for i in self._interactions:
+    for i in self._interaction_buttons:
       button = InteractionButton(text = i, parent = self)
-      self._interactions[i] = button
+      self._interaction_buttons[i] = button
       layout.addWidget(button)
 
   # change the stylesheet for the interaction area as a whole
@@ -108,13 +116,9 @@ class InteractionArea(QWidget):
       """
   
   # testing idea
-  def set_edit(self, action):
-    self._interactions[self.EDIT_ID].add_push_action(action)
-    print("???")
-
-  # testing idea
-  def set_reset(self, action):
-    self._interactions[self.RESET_ID].add_push_action(action)
+  def set_interaction_button_action(self, action, interaction_id):
+    self._interaction_buttons[interaction_id].add_push_action(action)
+    
 
 class InteractionButton(QPushButton):
 
@@ -122,19 +126,42 @@ class InteractionButton(QPushButton):
 
   def __init__(self, text, parent):
     super().__init__(text = text, parent = parent) # super initialization
-    self.setStyleSheet(self._get_interaction_button_style())
-
+    self.disable()
+    
+  # expecting an: ACTION. see main window for this definition for now.
+  # essentially hand it an action which it will hold on to
+  # and carry out every time the button is pressed.
+  # but, can swap out for a new "action" as needed.
   def add_push_action(self, action):
-    self._action = action # likely unnecessary.
-    self.clicked.connect(self._action.action)
-    # self.clicked.connect(action.action)
-    # action.action()
+    if action is not None:
+      self._action = action # likely unnecessary.
+      self.clicked.connect(self._action.action)
+      self.enable()
+    else:
+      self.disable()
 
+  # easy access to disable the button consistently with visual feedback
+  def disable(self):
+    self.setStyleSheet(self._get_interaction_button_disabled_style())
+    self.setEnabled(False)
+
+  # easy access to enable the button consistently with visual feedback
+  def enable(self):
+    self.setStyleSheet(self._get_interaction_button_enabled_style())
+    self.setEnabled(True)
   
   # change style of the interaction buttons
-  def _get_interaction_button_style(self):
+  def _get_interaction_button_enabled_style(self):
     return """
       background-color: grey; 
+      font: italic 1.5rem "Fira Sans", serif;
+      min-height: 30px;
+      """
+  
+  # change style of the interaction buttons
+  def _get_interaction_button_disabled_style(self):
+    return """
+      background-color: #E5E4E2; 
       font: italic 1.5rem "Fira Sans", serif;
       min-height: 30px;
       """

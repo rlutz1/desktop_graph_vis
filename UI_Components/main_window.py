@@ -56,7 +56,10 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
   # it is allowed to attach actions to front end portions.
   def _init_actions(self):
     self.set_edit_action(GraphEditAction())
-    self.set_reset_action(TestAction(self))
+    # self.set_reset_action(TestAction(self))
+    self.set_reset_action(None) # TODO
+    self.set_play_action(None) # TODO
+    self.set_step_action(None) # TODO
     
   # general access to set the edit action
   def set_edit_action(self, action):
@@ -65,6 +68,14 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
   # general access to set the reset action
   def set_reset_action(self, action):
     self._visual_pane.set_reset_action(action)
+
+  # general access to set the step action
+  def set_play_action(self, action):
+    self._visual_pane.set_play_action(action)
+    
+  # general access to set the step action
+  def set_step_action(self, action):
+    self._visual_pane.set_step_action(action)
 
   # getters
   def width(self):
