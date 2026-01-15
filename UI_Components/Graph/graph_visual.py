@@ -139,11 +139,11 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
     # self.setStyleSheet("max-width: 100px; max-height: 100px;")
     self.setMaximumSize(QSize(100, 100))
     self.setMinimumSize(QSize(100, 100))
-    self._draw_vertex(text)
+    self._draw_default_vertex(text)
 
   # draw the vertex within this widget. we will use a canvas for more flexibility.
   # very basic for now though.
-  def _draw_vertex(self, text):
+  def _draw_default_vertex(self, text):
     self._canvas_container = QLabel(parent = self)
     canvas = QPixmap(self._vertex_size, self._vertex_size)
     canvas.fill(self._background_color)
@@ -214,6 +214,9 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
   # By default, this property contains a position that refers to the origin 
   def get_position(self):
     return self.pos()
+  
+  def canvas(self):
+    return self._canvas_container.pixmap()
   
 # # an EDGE visual representation
 # class EdgeWidget(QWidget):
