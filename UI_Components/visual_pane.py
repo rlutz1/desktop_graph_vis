@@ -60,6 +60,11 @@ class VisualPane(QWidget): # generally a QWidget
     layout.addWidget(self._visual_area)
     layout.addWidget(self._interaction_area)
 
+  # add a new updater to a widget within
+  def update_visual(self, id, updater):
+    self._visual_area.update_visual(id, updater)
+
+
   # set the edit button action
   def set_edit_action(self, action):
     self._interaction_area.set_interaction_button_action(action, self._interaction_area.EDIT_ID)

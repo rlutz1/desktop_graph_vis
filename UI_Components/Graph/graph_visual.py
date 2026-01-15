@@ -39,6 +39,7 @@ from PyQt5.QtWidgets import (
 class GraphVisualArea(QWidget):
 
   _canvas_container = None
+  _visual_vertices = {} # id -> vertexwidget
   _visual_edges = {} # map of vertex to edges stemming from source
 
   def __init__(self, parent):
@@ -72,6 +73,10 @@ class GraphVisualArea(QWidget):
 
      # PLAYGROUND+++++++++++++++++++++++++++++++++++++++++
   
+  # add a new updater to a widget within
+  def update_visual(self, id, updater):
+    self._visual_area.update_visual(id, updater)
+
   def dragEnterEvent(self, e):
     e.accept()
 
@@ -83,6 +88,7 @@ class GraphVisualArea(QWidget):
   def add_vertex(self, v):
     self.layout().addWidget(v)
     self.layout().setCurrentWidget(v)
+    self._visual_vertices[v.id()] = v # add to id -> v mapping
 
   # for the moment, accepts VertexWidgets since this is mostly called
   # when an edge is added/changed
@@ -205,6 +211,9 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
     # return self.rect().center()
     # half_vertex_size = self._vertex_size // 2 # for center of canvas positioning
     return QPoint(self.pos().x() + self._half_vertex_size, self.pos().y() + self._half_vertex_size)
+  
+  def id(self):
+    return self._vertex_text
 
   # this may not work, but keeping for notes for edges to always be pointing to the center of a vertex:
   # property posᅟ: QPoint
