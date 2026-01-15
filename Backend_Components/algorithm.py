@@ -7,17 +7,17 @@
 
 class Algorithm:
 
-  __beginning_state = None # the special beginning state required
-  __sequence = [] # series of finite steps of the algorithm
-  __ending_state = None # the special ending state required
+  _beginning_state = None # the special beginning state required
+  _sequence = [] # series of finite steps of the algorithm
+  _ending_state = None # the special ending state required
 
   def __init__(self, begin, end, sequence = []):
     if begin is None or end is None:
       print("Beginning and ending state is REQUIRED. Algorithm init is faulty")
     
-    self.__beginning_state = begin
-    self.__ending_state = end
-    self.__sequence = sequence
+    self._beginning_state = begin
+    self._ending_state = end
+    self._sequence = sequence
     print("Algorithm initialized.")
 
 # ============================================================
@@ -82,7 +82,7 @@ class Visual():
 # in the front end widget to call .update() on a paint event occurrence.
 # ============================================================
 
-class Updater():
+class Update():
 
   _widget = None # the front end widget to change
 
@@ -94,6 +94,27 @@ class Updater():
   def update(self):
     pass
 
-  def assign_parent(self, widget):
+  def assign_widget(self, widget):
     self._widget = widget
 
+# ============================================================
+# unclear yet if this will be necessary or anything.
+# abstraction of the action a state can have.
+# overried the action() function to define any backend upkeep as 
+# needed.
+# ============================================================
+
+class Action():
+
+  _algorithm = None # the front end widget to change
+
+  def __init__(self):
+    pass
+
+  # this the method that should always be overriden 
+  # by a child updater.
+  def act(self):
+    pass
+
+  def assign_algorithm(self, algorithm):
+    self._algorithm = algorithm
