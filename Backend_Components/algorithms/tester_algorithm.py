@@ -22,10 +22,11 @@ class TesterAlgorithm(Algorithm):
   def _init_sequence(self):
     self._sequence = [self._beginning_state]
     # somehting something something
-    # (1) turn the colorado vertex green
-    self._sequence.append(TesterTurnGreenState(self))
+    
     # (2) move it
     self._sequence.append(TesterMoveVertexState(self))
+    # (1) turn the colorado vertex green
+    self._sequence.append(TesterTurnGreenState(self))
     self._sequence.append(self._ending_state)
     
   # main method to "run the algorithm".
@@ -34,6 +35,7 @@ class TesterAlgorithm(Algorithm):
   def run(self):
     for s in self._sequence:
       self._interpreter.send_visual(s.visuals())
+      s.act()
 
 
 # the state representing the highlighting of the colorado vertex as green
@@ -64,10 +66,11 @@ class TesterTurnGreenState(State):
           painter = QPainter(canvas)
           pen = QPen()
           pen.setWidth(3)
-          pen.setColor(QColor(0, 0, 255)) # all green 
+          pen.setColor(QColor(0, 255, 0)) # all green 
           painter.setPen(pen)
-          painter.drawEllipse(self.center(), 47, 47) # TODO: naughty!
+          painter.drawEllipse(self._widget.center(), 47, 47) # TODO: naughty!
           painter.end()
+          self._widget.update()
         except AttributeError:
           print("Widget was not assigned likely!")
 

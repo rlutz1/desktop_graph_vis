@@ -58,6 +58,10 @@ class State:
 
   def visuals(self):
     return self._visual
+  
+  def act(self):
+    if self._action is not None:
+      self._action.act()
 
 
 # ============================================================
