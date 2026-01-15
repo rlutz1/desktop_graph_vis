@@ -20,6 +20,14 @@ class Algorithm:
     self._sequence = sequence
     print("Algorithm initialized.")
 
+  # the main method to override and specify the run. 
+  # this could be general enough to implement here
+  # since it will mainly be the running through of 
+  # sequences, communicating with interpreter
+  # and awaiting the end of the animation call from interp.
+  def run(self):
+    pass
+
 # ============================================================
 # this is to represent a general state of the algorithm running.
 # an algorithm will be defined as generally a sequence of finite states.

@@ -16,11 +16,16 @@ class TesterAlgorithm(Algorithm):
   # the only thing we are doing is changing the hardcoded CO
   # vertex to green, then to red, with ending being back to black.
   def _init_sequence(self):
+    self._sequence = [self._beginning_state]
+    # somehting something something
+    self._sequence.append(self._ending_state)
+    
+  # main method to "run the algorithm".
+  # implementing here for now since i want to isolate in testing
+  # field. however, could likely be implemented in Algorithm instead
+  def run(self):
     pass
-
-
-  # def run(self):
-  #   for s in self.
+    # for s in self.
 
 # the required beginning state of the algorithm.
 class TesterBeginState(State):
