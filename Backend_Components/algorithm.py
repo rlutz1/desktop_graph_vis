@@ -10,14 +10,20 @@ class Algorithm:
   _beginning_state = None # the special beginning state required
   _sequence = [] # series of finite steps of the algorithm
   _ending_state = None # the special ending state required
+  _interpreter = None
 
-  def __init__(self, begin, end, sequence = []):
+
+  def __init__(self, begin, end, interpreter, sequence = []):
     if begin is None or end is None:
       print("Beginning and ending state is REQUIRED. Algorithm init is faulty")
+    
+    if interpreter is None:
+      print("No way to communcate with the front end!")
     
     self._beginning_state = begin
     self._ending_state = end
     self._sequence = sequence
+    self._interpreter = interpreter
     print("Algorithm initialized.")
 
   # the main method to override and specify the run. 

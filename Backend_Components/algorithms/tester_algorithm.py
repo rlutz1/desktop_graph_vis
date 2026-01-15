@@ -5,10 +5,11 @@ from PyQt5.QtWidgets import QLabel, QWidget
 
 class TesterAlgorithm(Algorithm):
 
-  def __init__(self):
+  def __init__(self, interpreter):
     super().__init__(
       begin = TesterBeginState(self),
-      end = TesterEndState(self)
+      end = TesterEndState(self), 
+      interpreter = interpreter
       )
     self._init_sequence()
     
