@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor, QDrag
+from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor, QDrag, QPaintEvent
 from PyQt5.QtCore import Qt, QPoint, QMimeData, QSize
 from PyQt5.QtWidgets import (
     QApplication,
@@ -75,7 +75,7 @@ class GraphVisualArea(QWidget):
   
   # add a new updater to a widget within
   def update_visual(self, id, updater):
-    self._visual_area.update_visual(id, updater)
+    self._visual_vertices[id].set_update(updater)
 
   def dragEnterEvent(self, e):
     e.accept()
@@ -131,6 +131,7 @@ class GraphVisualArea(QWidget):
 
 class VertexWidget(QWidget): # Qlabel can hold the canvas
 
+  _updater = None # needs to be filled as something to do o a paint event
   _edge_visuals = []
   _canvas_container = None
   _vertex_text = None
@@ -201,6 +202,14 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
         drag.setPixmap(pixmap)
         drag.exec_(Qt.DropAction.MoveAction)
         # self.move(e.pos()) # messes her up, do not use, not proper.
+
+  def paintEvent(self, e: QPaintEvent):
+    if self._updater is not None:
+      self._updater.update()
+
+  def set_updater(self, updater):
+    self._updater = updater
+    self._updater.assign_widget(self)
 
   # just give it a tuple for start and end, weight can just be number. 
   # we need to draw the line... anything else?
