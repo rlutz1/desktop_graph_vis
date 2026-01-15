@@ -22,15 +22,15 @@ class TesterAlgorithm(Algorithm):
     self._sequence = [self._beginning_state]
     # somehting something something
     # (1) turn the colorado vertex green
-    self._sequence.append()
+    self._sequence.append(TesterTurnGreenState(self))
     self._sequence.append(self._ending_state)
     
   # main method to "run the algorithm".
   # implementing here for now since i want to isolate in testing
   # field. however, could likely be implemented in Algorithm instead
   def run(self):
-    pass
-    # for s in self.
+    for s in self._sequence:
+      pass
 
 
 # the state representing the highlighting of the colorado vertex as green
