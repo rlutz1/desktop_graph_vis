@@ -69,13 +69,14 @@ class GraphVisualArea(QWidget):
     self.add_vertex(v2)  
     self.add_edge(v1, v2, 0)
     v3 = VertexWidget(self, "Colorado")
+    self.add_vertex(v3)  
     self.add_edge(v3, v2, 0)
 
      # PLAYGROUND+++++++++++++++++++++++++++++++++++++++++
   
   # add a new updater to a widget within
   def update_visual(self, id, updater):
-    self._visual_vertices[id].set_update(updater)
+    self._visual_vertices[id].set_updater(updater)
 
   def dragEnterEvent(self, e):
     e.accept()
@@ -89,6 +90,7 @@ class GraphVisualArea(QWidget):
     self.layout().addWidget(v)
     self.layout().setCurrentWidget(v)
     self._visual_vertices[v.id()] = v # add to id -> v mapping
+    print(self._visual_vertices.keys())
 
   # for the moment, accepts VertexWidgets since this is mostly called
   # when an edge is added/changed
@@ -131,6 +133,7 @@ class GraphVisualArea(QWidget):
 
 class VertexWidget(QWidget): # Qlabel can hold the canvas
 
+  _id = None
   _updater = None # needs to be filled as something to do o a paint event
   _edge_visuals = []
   _canvas_container = None
@@ -147,6 +150,7 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
     self.setMaximumSize(QSize(100, 100))
     self.setMinimumSize(QSize(100, 100))
     self._draw_default_vertex(text)
+    self._id = text # TODO: naughtty!!!
 
   # draw the vertex within this widget. we will use a canvas for more flexibility.
   # very basic for now though.
@@ -210,6 +214,7 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
   def set_updater(self, updater):
     self._updater = updater
     self._updater.assign_widget(self)
+    print(self._updater)
 
   # just give it a tuple for start and end, weight can just be number. 
   # we need to draw the line... anything else?
@@ -222,7 +227,7 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
     return QPoint(self.pos().x() + self._half_vertex_size, self.pos().y() + self._half_vertex_size)
   
   def id(self):
-    return self._vertex_text
+    return self._id
 
   # this may not work, but keeping for notes for edges to always be pointing to the center of a vertex:
   # property posᅟ: QPoint

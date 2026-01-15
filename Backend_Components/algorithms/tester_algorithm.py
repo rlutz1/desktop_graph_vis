@@ -1,4 +1,4 @@
-from algorithm import Algorithm, State, Visual, Update, Action
+from ..algorithm import Algorithm, State, Visual, Update, Action
 from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor, QDrag
 from PyQt5.QtCore import Qt, QPoint, QMimeData, QSize, QPropertyAnimation, QEasingCurve
 from PyQt5.QtWidgets import QLabel, QWidget
@@ -24,6 +24,8 @@ class TesterAlgorithm(Algorithm):
     # somehting something something
     # (1) turn the colorado vertex green
     self._sequence.append(TesterTurnGreenState(self))
+    # (2) move it
+    self._sequence.append(TesterMoveVertexState(self))
     self._sequence.append(self._ending_state)
     
   # main method to "run the algorithm".
@@ -31,7 +33,7 @@ class TesterAlgorithm(Algorithm):
   # field. however, could likely be implemented in Algorithm instead
   def run(self):
     for s in self._sequence:
-      pass
+      self._interpreter.send_visual(s.visuals())
 
 
 # the state representing the highlighting of the colorado vertex as green
@@ -111,7 +113,7 @@ class TesterMoveVertexState(State):
           w = self._widget.parent()
           w.anim = QPropertyAnimation(self._widget, b"pos")
           w.anim.setEasingCurve(QEasingCurve.InOutCubic)
-          w.anim.setEndValue(QPoint(400, 400))
+          w.anim.setEndValue(QPoint(100, 100))
           w.anim.setDuration(1500)
           w.anim.start()
         except AttributeError:

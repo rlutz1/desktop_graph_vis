@@ -56,6 +56,9 @@ class State:
     self._visual = visual
     print("State initialized.")
 
+  def visuals(self):
+    return self._visual
+
 
 # ============================================================
 # we're gonna focus for a moment on the visualization here.
@@ -84,6 +87,9 @@ class Visual():
   
   def ids(self):
     return self._visuals.keys()
+  
+  def get_updater(self, id):
+    return self._visuals[id]
   
 
 # ============================================================

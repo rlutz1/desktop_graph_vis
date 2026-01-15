@@ -12,7 +12,7 @@ class Interpreter():
   _algorithm = None
   _visualizer = None
 
-  def __init__(self, algorithm, visualizer):
+  def __init__(self, algorithm = None, visualizer = None):
     self._algorithm = algorithm
     self._visualizer = visualizer
 
@@ -21,11 +21,17 @@ class Interpreter():
   def send_visual(self, visuals):
     for id in visuals.ids():
       # send the visualizer the updater along with unique id
-      self._visualizer.update_visual(id, visuals[id]) # TODO
+      self._visualizer.update_visual(id, visuals.get_updater(id)) # TODO
     self._visualizer.update() # unsure if this is needed yet or if appropriate
     # i think i need to only update the widgets with changes, not sure if 
     # the paint event "falls" down through the inheritance tree
   
+  def set_algorithm(self, algorithm):
+    self._algorithm = algorithm
+  
+  def set_visualizer(self, visualizer):
+    self._visualizer = visualizer
+
   # notify the algo we are finished. unclear if needed yet.
   # def notify_complete(self):
   #    self._algorithm.notify()

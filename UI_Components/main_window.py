@@ -1,5 +1,6 @@
 import sys
-
+from Backend_Components.algorithms.tester_algorithm import TesterAlgorithm
+from Backend_Components.interpreter import Interpreter
 from UI_Components.navigation_pane import NavigationPane
 from UI_Components.visual_pane import VisualPane
 from PyQt5.QtCore import Qt, QSize
@@ -29,7 +30,8 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
   _width = 1000
   _height = 500
 
-  _curr_algorithm = None
+  _algorithm = None
+  _interpreter = None
   
   
   def __init__(self):
@@ -37,7 +39,11 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
     self._init_window() # 1. setup the window meta info
     self._init_actions()# 2. initialize window actions 
 
-
+    # TESTING ONLY!
+    self._interpreter = Interpreter(visualizer = self._visual_pane)
+    self._algorithm = TesterAlgorithm(self._interpreter)
+    self._interpreter.set_algorithm(self._algorithm)
+  
   def _init_window(self):
     self.setWindowTitle("Graph Algorithm Visualizer") # basic title
     self.setMinimumSize(QSize(self._width, self._height))
@@ -60,7 +66,7 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
     self.set_edit_action(GraphEditAction())
     # self.set_reset_action(TestAction(self))
     self.set_reset_action(None) # TODO
-    self.set_play_action(None) # TODO
+    self.set_play_action(TestAction(self)) # TODO
     self.set_step_action(None) # TODO
     
   # general access to set the edit action
@@ -78,6 +84,11 @@ class MainWindow(QMainWindow): # inherits from QMainWIndow
   # general access to set the step action
   def set_step_action(self, action):
     self._visual_pane.set_step_action(action)
+
+  # access point to run an algorithm
+  def run_algorithm(self):
+    if self._algorithm is not None:
+      self._algorithm.run()
 
   # getters
   def width(self):
@@ -131,7 +142,8 @@ class TestAction(Action):
 
   def action(self):
     print("Test action, reporting for duty")
-    self._root.set_edit_action(ChangeAction())
+    self._root.run_algorithm()
+    # self._root.set_edit_action(ChangeAction())
 
 
 
