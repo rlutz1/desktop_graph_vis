@@ -1,6 +1,6 @@
 from algorithm import Algorithm, State, Visual, Update, Action
 from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor, QDrag
-from PyQt5.QtCore import Qt, QPoint, QMimeData, QSize
+from PyQt5.QtCore import Qt, QPoint, QMimeData, QSize, QPropertyAnimation, QEasingCurve
 from PyQt5.QtWidgets import QLabel, QWidget
 
 class TesterAlgorithm(Algorithm):
@@ -34,7 +34,6 @@ class TesterAlgorithm(Algorithm):
 
 
 # the state representing the highlighting of the colorado vertex as green
-# for 2 ms
 class TesterTurnGreenState(State):
    
   def __init__(self, algorithm):
@@ -79,6 +78,54 @@ class TesterTurnGreenState(State):
 
     def act(self):
       print("I am turning the Colorado vertex green.")
+
+# one other state: move the vertex widget to an arbitrary spot.
+# this is really to test if the algorithm needs to run on its
+# own thread or if it's enough to just queue events via the
+# qt update() call and execution thread.
+# also good for testing "different states"
+class TesterMoveVertexState(State):
+   
+  def __init__(self, algorithm):
+    super().__init__(self.TesterMoveVertexAction(algorithm), self.TesterMoveVertexVisual())
+  
+  # VISUAL OF THE STATE
+  class TesterMoveVertexVisual(Visual):
+
+    def __init__(self):
+      super().__init__()
+      self._init_visuals()
+
+    def _init_visuals(self):
+      self.add_visual("Colorado", self.TesterMoveVertexUpdate())
+      
+    class TesterMoveVertexUpdate(Update):
+      def __init__(self):
+        super().__init__()
+      
+      # the goal is to redraw the outside of the widget as green.
+      # widget here should be a VertexWidget
+      def update(self):
+        try:
+          w = self._widget.parent()
+          w.anim = QPropertyAnimation(self._widget, b"pos")
+          w.anim.setEasingCurve(QEasingCurve.InOutCubic)
+          w.anim.setEndValue(QPoint(400, 400))
+          w.anim.setDuration(1500)
+          w.anim.start()
+        except AttributeError:
+          print("Widget was not assigned likely!")
+
+
+  # ACTION OF THE STATE
+  class TesterMoveVertexAction(Action):
+
+    def __init__(self, algorithm):
+      super().__init__()
+      self.assign_algorithm(algorithm)
+
+    def act(self):
+      print("I am MOVING the Colorado vertex.")
 
 
 # the required beginning state of the algorithm.
