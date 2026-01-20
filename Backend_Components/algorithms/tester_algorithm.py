@@ -22,11 +22,11 @@ class TesterAlgorithm(Algorithm):
   def _init_sequence(self):
     self._sequence = [self._beginning_state]
     # somehting something something
-    
+     # (1) turn the colorado vertex green
+    self._sequence.append(TesterTurnGreenState(self))
     # (2) move it
     self._sequence.append(TesterMoveVertexState(self))
-    # (1) turn the colorado vertex green
-    self._sequence.append(TesterTurnGreenState(self))
+   
     self._sequence.append(self._ending_state)
     
   # main method to "run the algorithm".

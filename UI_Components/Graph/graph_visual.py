@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor, QDrag, QPaintEvent
-from PyQt5.QtCore import Qt, QPoint, QMimeData, QSize
+from PyQt5.QtCore import Qt, QPoint, QMimeData, QSize, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -133,6 +133,8 @@ class GraphVisualArea(QWidget):
 
 class VertexWidget(QWidget): # Qlabel can hold the canvas
 
+  _animate = pyqtSignal(name = "animate")
+
   _id = None
   _updater = None # needs to be filled as something to do o a paint event
   _edge_visuals = []
@@ -151,6 +153,9 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
     self.setMinimumSize(QSize(100, 100))
     self._draw_default_vertex(text)
     self._id = text # TODO: naughtty!!!
+
+    
+    self._animate.connect(self.animate)
 
   # draw the vertex within this widget. we will use a canvas for more flexibility.
   # very basic for now though.
@@ -207,9 +212,14 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
         drag.exec_(Qt.DropAction.MoveAction)
         # self.move(e.pos()) # messes her up, do not use, not proper.
 
-  def paintEvent(self, e: QPaintEvent):
-    if self._updater is not None:
-      self._updater.update()
+    @pyqtSlot()
+    def animate(self):
+      if self._updater is not None:
+        self._updater.update()
+
+  # def paintEvent(self, e: QPaintEvent):
+  #   if self._updater is not None:
+  #     self._updater.update()
 
   def set_updater(self, updater):
     self._updater = updater
