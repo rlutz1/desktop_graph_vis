@@ -85,6 +85,9 @@ class GraphVisualArea(QWidget):
      e.source().move(e.pos())
      self._update_canvas()
      
+  def animate(self):
+    for v in self._visual_vertices:
+      self._visual_vertices[v]._animate.emit()
 
   def add_vertex(self, v):
     self.layout().addWidget(v)
@@ -152,10 +155,9 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
     self.setMaximumSize(QSize(100, 100))
     self.setMinimumSize(QSize(100, 100))
     self._draw_default_vertex(text)
-    self._id = text # TODO: naughtty!!!
+    self._id = text # TODO: naughty!!!
 
-    
-    self._animate.connect(self.animate)
+    self._animate.connect(self.animate) # animation signal slotting
 
   # draw the vertex within this widget. we will use a canvas for more flexibility.
   # very basic for now though.
@@ -212,10 +214,10 @@ class VertexWidget(QWidget): # Qlabel can hold the canvas
         drag.exec_(Qt.DropAction.MoveAction)
         # self.move(e.pos()) # messes her up, do not use, not proper.
 
-    @pyqtSlot()
-    def animate(self):
-      if self._updater is not None:
-        self._updater.update()
+  @pyqtSlot()
+  def animate(self):
+    if self._updater is not None:
+      self._updater.update()
 
   # def paintEvent(self, e: QPaintEvent):
   #   if self._updater is not None:

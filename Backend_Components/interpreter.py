@@ -22,7 +22,7 @@ class Interpreter():
     for id in visuals.ids():
       # send the visualizer the updater along with unique id
       self._visualizer.update_visual(id, visuals.get_updater(id)) # TODO
-    self._visualizer.update() # unsure if this is needed yet or if appropriate
+    self._visualizer.animate() # unsure if this is needed yet or if appropriate
     # i think i need to only update the widgets with changes, not sure if 
     # the paint event "falls" down through the inheritance tree
   
